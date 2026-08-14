@@ -1,0 +1,39 @@
+# WordPress core / config (not versioned, contains DB secrets)
+wp-config.php
+__wp__/
+
+# WP.com-managed plugin symlinks (point into WP.com's shared plugin store,
+# don't resolve off-platform, and aren't custom code - WP.com handles these)
+wp-content/plugins/akismet
+wp-content/plugins/classic-editor
+wp-content/plugins/crowdsignal-forms
+wp-content/plugins/google-listings-and-ads
+wp-content/plugins/gravatar-enhanced
+wp-content/plugins/gutenberg
+wp-content/plugins/jetpack
+wp-content/plugins/layout-grid
+wp-content/plugins/mailpoet
+wp-content/plugins/page-optimize
+wp-content/plugins/pinterest-for-woocommerce
+wp-content/plugins/polldaddy
+wp-content/plugins/woocommerce
+wp-content/plugins/woocommerce-payments
+wp-content/plugins/woocommerce-services
+wp-content/mu-plugins/wpcomsh
+wp-content/mu-plugins/wpcomsh-loader.php
+
+# WooCommerce / plugin debug logs (can contain order/customer data, API payloads)
+wp-content/uploads/wc-logs/
+
+# Backups and DB dumps
+*.sql
+*.sql.gz
+*.tar.gz
+*.zip
+
+# WP cache/upgrade scratch dirs
+wp-content/cache/
+wp-content/upgrade/
+
+# OS cruft
+.DS_Store
