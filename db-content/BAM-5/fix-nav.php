@@ -11,6 +11,16 @@
  *   APPLY:    wp eval-file /tmp/fix-nav.php --apply
  *
  * Safe to re-run: pages already carrying the links are skipped.
+ *
+ * ⚠️ HISTORY — this script shipped a data-corrupting bug on 2026-08-18.
+ * It passed raw content to wp_update_post(), which runs wp_unslash() on its
+ * input, silently stripping one level of backslash escaping (three per page:
+ * a CSS `\2713` glyph and two JS escapes, breaking the inline script). The
+ * wp_slash() call below is the fix. See restore-and-fix.php and the "Incident"
+ * section of README.md. Never hand unslashed content to wp_update_post().
+ *
+ * Note: `--apply` cannot be passed through `wp eval-file` (WP-CLI rejects
+ * unknown flags before the script sees them). Use BAM5_APPLY=1 instead.
  */
 
 $apply   = in_array( '--apply', $args ?? [], true ) || getenv( 'BAM5_APPLY' ) === '1';
@@ -59,7 +69,9 @@ foreach ( $pages as $id => $label ) {
         continue;
     }
 
-    $res = wp_update_post( [ 'ID' => $id, 'post_content' => $new ], true );
+    // wp_slash() compensates for the wp_unslash() inside wp_update_post().
+    // Without it, every backslash in the content is silently eaten.
+    $res = wp_update_post( [ 'ID' => $id, 'post_content' => wp_slash( $new ) ], true );
 
     if ( is_wp_error( $res ) ) {
         echo "[$id $label] ERROR: " . $res->get_error_message() . "\n\n";

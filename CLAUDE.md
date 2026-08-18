@@ -169,11 +169,36 @@ ssh wpcom "wp post get 161966 --field=post_content"   # a DB-rendered page's mar
 ssh wpcom "wp post list --post_type=page --fields=ID,post_title,post_name"
 ```
 
-Two rules for any DB change:
+### `wp_slash()` — the one that will bite you
+
+**Always wrap content passed to `wp_update_post()` in `wp_slash()`.**
+
+```php
+wp_update_post( [ 'ID' => $id, 'post_content' => wp_slash( $new ) ], true );
+```
+
+`wp_update_post()` runs `wp_unslash()` on its input (it expects already-slashed data, a
+magic-quotes legacy). Passing raw content strips one level of backslash escaping
+*everywhere in the document* — silently, with no error and a successful return value.
+
+This corrupted both `/fundraisers/` and `/events/` on 2026-08-18: a CSS `\2713` checkmark
+glyph became literal `2713`, and two JS escapes (`"\""` and `You\'ll`) became syntax errors
+that killed the entire inline `<script>` block. See `db-content/BAM-5/README.md` for the
+full incident. The same hazard applies to `wp post update <id> <file>`.
+
+Rules for any DB change:
 
 1. **Write it as a `db-content/<TICKET>/` script**, not as ad-hoc commands — dry-run by
    default, idempotent, backs up before writing, aborts on an ambiguous match.
-2. **Post the verification output to the Linear ticket afterwards.** A merged PR containing
+2. **`wp_slash()` on write**, and **re-read the post afterwards inside the script** and
+   assert the bytes round-tripped, so a bad write reports itself instead of looking like
+   success.
+3. **Verify with a full `diff` against the backup**, never a spot-check for the change you
+   intended. The corruption above was invisible to "are the two links present?" — they were.
+   A byte count that doesn't match the dry run's prediction is a real signal; chase it.
+4. **Commit the pre-change backup** into `db-content/<TICKET>/backups/`. `/tmp` on the
+   server is ephemeral and is not a rollback path.
+5. **Post the verification output to the Linear ticket afterwards.** A merged PR containing
    only `db-content/` proves the fix was *written*, not that it is *live* — the Linear
    comment is the only deploy record a DB change ever gets.
 

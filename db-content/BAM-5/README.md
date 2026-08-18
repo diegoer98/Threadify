@@ -41,14 +41,51 @@ writing, and refuses to touch a page whose anchor doesn't match exactly once.
 
 ```sh
 # copy to the server
-ssh <wpcom-user>@ssh.wp.com "cat > /tmp/fix-nav.php" < db-content/BAM-5/fix-nav.php
+ssh wpcom "cat > /tmp/fix-nav.php" < db-content/BAM-5/fix-nav.php
 
 # dry run first — prints what it would change, writes nothing
-ssh <wpcom-user>@ssh.wp.com "wp eval-file /tmp/fix-nav.php"
+ssh wpcom "wp eval-file /tmp/fix-nav.php"
 
-# apply
-ssh <wpcom-user>@ssh.wp.com "wp eval-file /tmp/fix-nav.php --apply"
+# apply — NOTE: `--apply` does not survive `wp eval-file` (WP-CLI rejects
+# unknown flags first), so the env var is the real switch
+ssh wpcom "BAM5_APPLY=1 wp eval-file /tmp/fix-nav.php"
 ```
+
+## Incident — backslash corruption, 2026-08-18
+
+The first apply of `fix-nav.php` inserted the two links **and silently corrupted
+three backslash escapes per page.** Both pages' inline JavaScript was left with
+syntax errors for roughly four minutes before it was caught and reverted.
+
+`wp_update_post()` runs `wp_unslash()` on its input — a magic-quotes legacy: it
+expects data that has already been slashed. The script passed raw
+`post_content`, so one level of escaping was stripped:
+
+| Before | After | Effect |
+|---|---|---|
+| `content:"\2713"` | `content:"2713"` | CSS checkmark glyph became literal text `2713` on every bullet |
+| `"\"": "&quot;"` | `""": "&quot;"` | JavaScript syntax error |
+| `You\'ll continue` | `You'll continue` | JavaScript syntax error |
+
+**How it was caught.** The dry run predicted `31710 -> 31778` bytes (+68, the two
+links). The applied result was 31775 — three bytes short, one per stripped
+backslash. Chasing that 3-byte gap with a full `diff` against the backup exposed
+it. Verifying only "are the two links present?" would have missed it entirely,
+because the links *were* correctly present.
+
+**Fix.** `restore-and-fix.php` rebuilds `post_content` from the pre-fix backup,
+re-inserts the links, and writes with `wp_slash()`. It re-reads the post
+afterwards and asserts the bytes round-tripped exactly, refusing to report
+success otherwise. `fix-nav.php` has been corrected the same way.
+
+**Rules this establishes for every future DB change:**
+
+1. **Always `wp_slash()` content passed to `wp_update_post()`.**
+2. **Verify with a full `diff` against the backup, never a spot-check** for the
+   change you intended. Byte-count deltas that don't match the prediction are a
+   signal, not a rounding error.
+3. **Round-trip inside the script** — re-read after writing and compare, so a
+   bad write reports itself instead of looking like success.
 
 ## Verifying
 
@@ -65,10 +102,22 @@ cache-buster or wait ~5 minutes.
 
 ## Rolling back
 
+The pristine pre-fix `post_content` for both pages is committed here in
+`backups/` — `/tmp/bam5-backups/` on the server is ephemeral and must not be
+relied on.
+
 ```sh
-ssh <wpcom-user>@ssh.wp.com "ls /tmp/bam5-backups/"
-ssh <wpcom-user>@ssh.wp.com "wp post update 161967 /tmp/bam5-backups/161967-<stamp>.html"
+# restore the exact pre-fix state (drops the two nav links as well)
+ssh wpcom "mkdir -p /tmp/bam5-restore"
+for id in 161966 161967; do
+  ssh wpcom "cat > /tmp/bam5-restore/$id.html" < db-content/BAM-5/backups/$id-20260818-040921.html
+done
+ssh wpcom "wp post update 161966 /tmp/bam5-restore/161966.html"
 ```
+
+⚠️ `wp post update <id> <file>` has the **same unslashing hazard** described in
+the incident above. Verify with a full `diff` afterwards, or restore via
+`restore-and-fix.php`, which handles slashing and self-checks the round trip.
 
 ## Open question
 
