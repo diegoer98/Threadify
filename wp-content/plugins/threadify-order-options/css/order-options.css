@@ -1,0 +1,73 @@
+/**
+ * Threadify Order Options — storefront fields.
+ * Gold accent matches the Threadify site palette; surfaces stay neutral so the
+ * block sits comfortably on whichever product template is active.
+ */
+
+.tfo-options {
+	margin: 0 0 1.25rem;
+	padding: 1rem 1.125rem 0.5rem;
+	border: 1px solid rgba(201, 168, 76, 0.35);
+	border-radius: 6px;
+	background: rgba(201, 168, 76, 0.04);
+}
+
+.tfo-field {
+	margin: 0 0 1rem;
+}
+
+.tfo-field label {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-weight: 600;
+	font-size: 0.9375rem;
+	letter-spacing: 0.01em;
+}
+
+.tfo-field .required {
+	color: #b3261e;
+	border: 0;
+	text-decoration: none;
+}
+
+.tfo-options select,
+.tfo-options input[type="file"] {
+	width: 100%;
+	max-width: 26rem;
+	padding: 0.5rem 0.625rem;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	border-radius: 4px;
+	background: #fff;
+	font-size: 0.9375rem;
+	line-height: 1.4;
+}
+
+.tfo-options select:focus,
+.tfo-options input[type="file"]:focus {
+	outline: 2px solid #c9a84c;
+	outline-offset: 1px;
+	border-color: #c9a84c;
+}
+
+.tfo-hint {
+	display: block;
+	margin-top: 0.35rem;
+	font-size: 0.8125rem;
+	opacity: 0.7;
+}
+
+/* Order screens (thank-you page, account order detail) */
+.tfo-design-name {
+	margin: 0.25rem 0 0;
+	font-size: 0.875rem;
+}
+
+/* Dark templates: lift the controls back off the background. */
+@media (prefers-color-scheme: dark) {
+	.tfo-options select,
+	.tfo-options input[type="file"] {
+		background: #1a1a1a;
+		border-color: #3a3a3a;
+		color: #e8e8e8;
+	}
+}
