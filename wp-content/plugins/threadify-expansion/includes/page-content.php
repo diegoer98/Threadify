@@ -954,3 +954,207 @@ function tse_content_service_area_city( $city ) {
     '/about/'         => 'About Threadify',
 ]);
 }
+
+/* ── SHOP ───────────────────────────────────────── */
+function tse_content_shop() {
+    return '
+<div id="tse-shop">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Build your order</span>
+      <h2>Shop blanks by industry.</h2>
+      <p>Pick your industry and browse real SanMar &amp; Carhartt garments that fit it — with product photos and full color ranges. Choose your pieces, set quantities, tell us where you want your embroidery, and add your logo. We finish with a quote, no payment up front.</p>
+    </div>
+    <div class="ind-layout">
+      <div class="ind-tabs" id="indTabs" role="tablist" aria-label="Shop by industry">
+        <button type="button" class="ind-tab active" data-industry="construction" role="tab" aria-selected="true">
+          <span class="ic" aria-hidden="true">&#9874;</span>
+          <span class="tab-txt"><h3>Construction</h3><p>Carhartt tees, work shirts, duck jackets, hi-vis &amp; caps.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="culinary" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#127859;</span>
+          <span class="tab-txt"><h3>Culinary</h3><p>Aprons, chef wear &amp; soft tees.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="office" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#128188;</span>
+          <span class="tab-txt"><h3>Office &amp; Corporate</h3><p>Silk Touch polos, soft shells, fleece &amp; backpacks.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="spirit" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#127881;</span>
+          <span class="tab-txt"><h3>Spirit Merch</h3><p>Soft tees, hoodies &amp; crews for teams &amp; schools.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="medical" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#9877;</span>
+          <span class="tab-txt"><h3>Medical &amp; Healthcare</h3><p>Scrubs, lab coats &amp; snag-proof polos.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="hospitality" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#127870;</span>
+          <span class="tab-txt"><h3>Hospitality &amp; Events</h3><p>Aprons, polos, tees &amp; totes for staff.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="fitness" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#128170;</span>
+          <span class="tab-txt"><h3>Fitness &amp; Wellness</h3><p>Performance tees, polos, hoodies &amp; tanks.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="automotive" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#128295;</span>
+          <span class="tab-txt"><h3>Automotive &amp; Trades</h3><p>Industrial work shirts, Carhartt &amp; hi-vis.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="outdoor" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#127956;</span>
+          <span class="tab-txt"><h3>Outdoor &amp; Recreation</h3><p>The North Face, Eddie Bauer &amp; Cotopaxi.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="golf" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#9971;</span>
+          <span class="tab-txt"><h3>Golf &amp; Country Club</h3><p>TravisMathew &amp; Nike performance polos.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="bags" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#127890;</span>
+          <span class="tab-txt"><h3>Bags &amp; Accessories</h3><p>Totes, backpacks, duffels &amp; coolers.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="headwear" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#129504;</span>
+          <span class="tab-txt"><h3>Headwear</h3><p>Structured caps, snapbacks &amp; beanies.</p></span>
+        </button>
+        <button type="button" class="ind-tab" data-industry="education" role="tab" aria-selected="false">
+          <span class="ic" aria-hidden="true">&#127891;</span>
+          <span class="tab-txt"><h3>Education &amp; Youth</h3><p>Youth &amp; toddler tees, hoodies &amp; joggers.</p></span>
+        </button>
+      </div>
+      <a class="ind-photo-panel" id="indPhotoPanel" href="/order-builder/?industry=construction">
+        <img id="indPhotoImg" src="https://threadifyapparel.com/wp-content/uploads/2026/07/construction-pic.jpg" alt="Crew working on a construction site in Carhartt-style workwear" />
+        <div class="ind-photo-cap">
+          <div class="pt" id="indPhotoTitle">Construction</div>
+          <div class="go" id="indPhotoGo">Browse Construction garments →</div>
+        </div>
+      </a>
+    </div>
+    <p class="shop-note">Nearly 3,000 real SanMar garments across 13 industries, each with its full real color range and in-depth specs — pick an industry, search or browse, and click any photo for full details. Exact sizes and availability are confirmed with your quote.</p>
+  </div>
+
+  <div class="wrap" style="margin-top:64px;">
+    <div class="section-head">
+      <span class="eyebrow">Recent work</span>
+      <h2>Real orders, off our machines.</h2>
+      <p>A look at pieces we\'ve made for brands, schools, teams, and small businesses around Federal Way and the Puget Sound area. Use the filters to browse by method.</p>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="embroidery">Embroidery</button>
+      <button class="filter-btn" data-filter="dtf">DTF Printing</button>
+      <button class="filter-btn" data-filter="patches">Custom Patches</button>
+      <button class="filter-btn" data-filter="heatpress">Heat Press</button>
+    </div>
+
+    <div class="gallery" id="gallery">
+      <figure class="tile work-item" data-category="embroidery">
+        <img src="https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics1.jpg" alt="Black hoodies with embroidered Salesforce logos" loading="lazy" />
+        <figcaption class="cap"><div class="t">Salesforce team hoodies</div><div class="s">Embroidery</div></figcaption>
+      </figure>
+      <figure class="tile work-item" data-category="embroidery">
+        <img src="https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics4.jpg" alt="Gray quarter-zip embroidered with UW School of Pharmacy logo" loading="lazy" />
+        <figcaption class="cap"><div class="t">UW School of Pharmacy 1/4-zip</div><div class="s">Embroidery</div></figcaption>
+      </figure>
+      <figure class="tile work-item" data-category="embroidery">
+        <img src="https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics2.jpg" alt="Embroidery machine stitching a Kappa Psi Greek-letter design" loading="lazy" />
+        <figcaption class="cap"><div class="t">Kappa Psi Greek-letter crest</div><div class="s">Embroidery</div></figcaption>
+      </figure>
+      <figure class="tile work-item" data-category="embroidery">
+        <img src="https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics3.jpg" alt="Embroidery machine stitching a detailed dragon design" loading="lazy" />
+        <figcaption class="cap"><div class="t">Custom dragon artwork</div><div class="s">Embroidery</div></figcaption>
+      </figure>
+      <figure class="tile work-item" data-category="embroidery">
+        <img src="https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics5.jpg" alt="Canvas tote bag embroidered with the Red Wagon Burger logo" loading="lazy" />
+        <figcaption class="cap"><div class="t">Red Wagon Burger tote</div><div class="s">Embroidery</div></figcaption>
+      </figure>
+      <figure class="tile work-item" data-category="embroidery">
+        <img src="https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics6.jpg" alt="Embroidered USA World Cup totes hanging at a Threadify market booth" loading="lazy" />
+        <figcaption class="cap"><div class="t">World Cup market totes</div><div class="s">Embroidery</div></figcaption>
+      </figure>
+
+      <!-- Empty-state shown for methods we have not photographed yet (no fake samples). -->
+      <div class="empty-state hide" id="emptyState">
+        <h3>Samples coming soon</h3>
+        <p>We do this work every week — we just haven\'t added photos to this filter yet. Want to see examples? Reach out and we\'ll send recent pieces.</p>
+        <a href="/#contact" class="btn btn-primary">Request samples</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var INDUSTRY_PHOTOS = {
+    construction: { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/construction-pic.jpg", alt: "Crew working on a construction site in Carhartt-style workwear", name: "Construction" },
+    culinary:     { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/culinary-pic.jpg", alt: "Chef in an embroidered apron dusting flour over fresh pasta in a restaurant kitchen", name: "Culinary" },
+    office:       { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/office-pic.jpg", alt: "Team in coordinated business-casual embroidered apparel", name: "Office & Corporate" },
+    spirit:       { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/spirit-pic.jpg", alt: "Group in matching embroidered team hoodies", name: "Spirit Merch" },
+    medical:      { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/healthcare-pic.jpg", alt: "Two healthcare workers in teal scrubs", name: "Medical & Healthcare" },
+    hospitality:  { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/hospitality-pic.jpg", alt: "Restaurant front-of-house staff in embroidered aprons and uniforms", name: "Hospitality & Events" },
+    fitness:      { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/fitness-pic.jpg", alt: "Person in athletic performance apparel", name: "Fitness & Wellness" },
+    automotive:   { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/automotive-pic.jpg", alt: "Mechanic in embroidered workwear next to a truck", name: "Automotive & Trades" },
+    outdoor:      { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/outdoor-pic.jpg", alt: "Two hikers in outdoor apparel on a foggy trail", name: "Outdoor & Recreation" },
+    golf:         { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/golf-pic.jpg", alt: "Two golfers walking the course in embroidered polos", name: "Golf & Country Club" },
+    bags:         { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/bags-pic.jpg", alt: "Backpacks and duffel bags on display outdoors", name: "Bags & Accessories" },
+    headwear:     { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/headwear-pic.jpg", alt: "Structured trucker cap product shot", name: "Headwear" },
+    education:    { img: "https://threadifyapparel.com/wp-content/uploads/2026/07/threadify-pics2.jpg", alt: "Embroidery machine stitching a fraternity design", name: "Education & Youth" }
+  };
+  var indTabs = document.querySelectorAll(".ind-tab");
+  var indPhotoImg = document.getElementById("indPhotoImg");
+  var indPhotoPanel = document.getElementById("indPhotoPanel");
+  var indPhotoTitle = document.getElementById("indPhotoTitle");
+  var indPhotoGo = document.getElementById("indPhotoGo");
+  function setIndustryTab(slug) {
+    var p = INDUSTRY_PHOTOS[slug];
+    if (!p) return;
+    indTabs.forEach(function (t) {
+      var on = t.getAttribute("data-industry") === slug;
+      t.classList.toggle("active", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    indPhotoImg.style.opacity = "0";
+    setTimeout(function () {
+      indPhotoImg.src = p.img;
+      indPhotoImg.alt = p.alt;
+      indPhotoImg.style.opacity = "1";
+    }, 140);
+    indPhotoTitle.textContent = p.name;
+    indPhotoGo.textContent = "Browse " + p.name + " garments →";
+    indPhotoPanel.href = "/order-builder/?industry=" + slug;
+  }
+  indTabs.forEach(function (t) {
+    t.addEventListener("click", function () { setIndustryTab(t.getAttribute("data-industry")); });
+  });
+
+  var filterBtns = document.querySelectorAll(".filter-btn");
+  var items = document.querySelectorAll(".work-item");
+  var emptyState = document.getElementById("emptyState");
+  function applyFilter(filter) {
+    var visible = 0;
+    items.forEach(function (item) {
+      var match = filter === "all" || item.getAttribute("data-category") === filter;
+      item.classList.toggle("hide", !match);
+      if (match) visible++;
+    });
+    emptyState.classList.toggle("hide", visible > 0);
+  }
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      filterBtns.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      applyFilter(btn.getAttribute("data-filter"));
+    });
+  });
+})();
+</script>
+<!--
+  Cart badge/drawer module -- ported from the homepage, deliberately left INERT
+  (type="text/plain" so the browser never executes it) per Diego\'s 2026-08-24
+  call to defer cart UI until the new page layout is settled. To reactivate:
+  remove the type="text/plain" attribute below. Do not delete this block.
+-->
+<script type="text/plain" id="tse-cart-module-disabled">
+' . tse_cart_module_source() . '
+</script>';
+}

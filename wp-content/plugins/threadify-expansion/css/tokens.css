@@ -1,0 +1,31 @@
+/* ============================================================
+   Threadify Expansion — Shared Design Tokens
+   ============================================================
+   Custom properties ported from the live homepage's inline
+   <style id="tdfy"> block (same hex values documented in
+   styles.css's own --gold/--bg/etc. tokens, but under the
+   homepage's original variable names) so ported homepage
+   markup/CSS -- shop.css, and future faq.css/about.css/home.css --
+   can be copied close to verbatim instead of hand-translated.
+
+   Deliberately prefixed --tdfy-* : styles.css already declares
+   --radius and --border on :root with different meanings/values
+   (--border there is a bare color; the homepage's --border is a
+   full "1px solid <color>" shorthand). Sharing the same custom
+   property name across those two stylesheets would silently break
+   whichever component reads the "wrong" one. Prefixing avoids that
+   collision entirely rather than relying on load order.
+*/
+
+:root {
+  --tdfy-cream:     #F5F0E8;
+  --tdfy-parchment: #EDE8DC;
+  --tdfy-forest:    #2E4A35;
+  --tdfy-brass:     #B8922A;
+  --tdfy-ink:       #1A1A18;
+  --tdfy-stone:     #6B6B60;
+
+  --tdfy-maxw:   1180px;
+  --tdfy-radius: 6px;
+  --tdfy-border: 1px solid rgba(26, 26, 24, 0.12);
+}
