@@ -16,7 +16,7 @@ define( 'TSE_URL',     plugin_dir_url( __FILE__ ) );
 
 require_once TSE_DIR . 'includes/page-content.php';
 require_once TSE_DIR . 'includes/create-pages.php';
-require_once TSE_DIR . 'includes/create-menu.php';
+require_once TSE_DIR . 'includes/nav-tree.php';
 
 // ── Lifecycle ──────────────────────────────────────────────────────
 register_activation_hook( __FILE__, 'tse_activate' );
@@ -24,7 +24,6 @@ register_activation_hook( __FILE__, 'tse_activate' );
 function tse_activate() {
     tse_create_all_pages();
     tse_create_city_pages(); // city pages need /service-areas/ parent to exist first
-    tse_create_menu();
     flush_rewrite_rules();
 }
 
@@ -101,7 +100,7 @@ function tse_inject_homepage_nav() {
     if ( tse_is_service_page() ) return;
     if ( ! is_front_page() && ! is_home() ) return;
 
-    $base = home_url('/');
+    $nav_items_json = wp_json_encode( tse_nav_tree() );
     ?>
 <style id="tse-nav-inject-css">
 .tse-dd-wrap {
@@ -171,69 +170,9 @@ function tse_inject_homepage_nav() {
 <script id="tse-nav-inject-js">
 (function() {
 
-    var NAV_ITEMS = [
-        {
-            label: 'Embroidery',
-            url:   '<?php echo esc_url($base . "embroidery/"); ?>',
-            children: [
-                { label: 'All Embroidery Services',   url: '<?php echo esc_url($base . "embroidery/"); ?>' },
-                { sep: true },
-                { label: 'Logo Embroidery',           url: '<?php echo esc_url($base . "embroidery/logo-embroidery/"); ?>' },
-                { label: 'Embroidered Polo Shirts',   url: '<?php echo esc_url($base . "embroidery/embroidered-polo-shirts/"); ?>' },
-                { label: 'Embroidered Jackets',       url: '<?php echo esc_url($base . "embroidery/embroidered-jackets/"); ?>' },
-                { label: 'Embroidered Hats & Caps',   url: '<?php echo esc_url($base . "embroidery/embroidered-hats-caps/"); ?>' },
-                { label: 'Embroidered Beanies',       url: '<?php echo esc_url($base . "embroidery/embroidered-beanies/"); ?>' },
-                { label: 'Embroidered Hoodies',       url: '<?php echo esc_url($base . "embroidery/embroidered-hoodies/"); ?>' },
-            ]
-        },
-        {
-            label: 'DTF Printing',
-            url:   '<?php echo esc_url($base . "dtf-printing/"); ?>',
-            children: [
-                { label: 'All DTF Printing',          url: '<?php echo esc_url($base . "dtf-printing/"); ?>' },
-                { sep: true },
-                { label: 'Custom T-Shirts',           url: '<?php echo esc_url($base . "dtf-printing/custom-t-shirts/"); ?>' },
-                { label: 'DTF for Teams & Groups',    url: '<?php echo esc_url($base . "dtf-printing/dtf-for-teams/"); ?>' },
-                { label: 'DTF Gang Sheets',           url: '<?php echo esc_url($base . "dtf-printing/gang-sheets/"); ?>' },
-            ]
-        },
-        {
-            label: 'Patches',
-            url:   '<?php echo esc_url($base . "custom-patches/"); ?>',
-            children: []
-        },
-        {
-            label: 'Digitizing',
-            url:   '<?php echo esc_url($base . "design-digitizing/"); ?>',
-            children: []
-        },
-        {
-            label: 'Service Areas',
-            url:   '<?php echo esc_url($base . "service-areas/"); ?>',
-            children: [
-                { label: 'All Service Areas',  url: '<?php echo esc_url($base . "service-areas/"); ?>' },
-                { sep: true },
-                { label: 'Seattle',            url: '<?php echo esc_url($base . "service-areas/seattle/"); ?>' },
-                { label: 'Bellevue',           url: '<?php echo esc_url($base . "service-areas/bellevue/"); ?>' },
-                { label: 'Kirkland',           url: '<?php echo esc_url($base . "service-areas/kirkland/"); ?>' },
-                { label: 'Renton',             url: '<?php echo esc_url($base . "service-areas/renton/"); ?>' },
-                { label: 'Tacoma',             url: '<?php echo esc_url($base . "service-areas/tacoma/"); ?>' },
-                { label: 'Redmond',            url: '<?php echo esc_url($base . "service-areas/redmond/"); ?>' },
-                { label: 'Kent',               url: '<?php echo esc_url($base . "service-areas/kent/"); ?>' },
-                { label: 'Bothell',            url: '<?php echo esc_url($base . "service-areas/bothell/"); ?>' },
-            ]
-        },
-        {
-            label: 'FAQ',
-            url:   '<?php echo esc_url($base . "faq/"); ?>',
-            children: []
-        },
-        {
-            label: 'About',
-            url:   '<?php echo esc_url($base . "about/"); ?>',
-            children: []
-        },
-    ];
+    // Sourced from tse_nav_tree() (includes/nav-tree.php) -- the single
+    // canonical nav definition, instead of a hand-duplicated literal here.
+    var NAV_ITEMS = <?php echo $nav_items_json; ?>;
 
     function buildItem(item) {
         var wrap = document.createElement('span');

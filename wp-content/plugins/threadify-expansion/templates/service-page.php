@@ -23,77 +23,14 @@ foreach ( $tse_ancestors as $anc_id ) {
 }
 $tse_crumbs[] = '<strong>' . get_the_title() . '</strong>';
 
-/* Nav dropdowns data */
-$tse_nav = [
-    [
-        'label' => 'Custom Embroidery',
-        'url'   => home_url('/embroidery/'),
-        'children' => [
-            [ 'label' => 'Logo Embroidery',        'url' => home_url('/embroidery/logo-embroidery/')         ],
-            [ 'label' => 'Polo Shirts',             'url' => home_url('/embroidery/embroidered-polo-shirts/') ],
-            [ 'label' => 'Jackets & Outerwear',     'url' => home_url('/embroidery/embroidered-jackets/')     ],
-            [ 'label' => 'Hats & Caps',             'url' => home_url('/embroidery/embroidered-hats-caps/')   ],
-            [ 'label' => 'Beanies',                 'url' => home_url('/embroidery/embroidered-beanies/')     ],
-            [ 'label' => 'Hoodies & Sweatshirts',   'url' => home_url('/embroidery/embroidered-hoodies/')     ],
-        ],
-    ],
-    [
-        'label' => 'DTF Printing',
-        'url'   => home_url('/dtf-printing/'),
-        'children' => [
-            [ 'label' => 'Custom T-Shirts',         'url' => home_url('/dtf-printing/custom-t-shirts/') ],
-            [ 'label' => 'Teams & Group Orders',    'url' => home_url('/dtf-printing/dtf-for-teams/')   ],
-            [ 'label' => 'DTF Gang Sheets',         'url' => home_url('/dtf-printing/gang-sheets/')     ],
-        ],
-    ],
-    [
-        'label' => 'Embroidery Digitizing',
-        'url'   => home_url('/design-digitizing/'),
-        'children' => [],
-    ],
-    [
-        'label' => 'Custom Patches',
-        'url'   => home_url('/custom-patches/'),
-        'children' => [],
-    ],
-    [
-        'label' => 'Service Areas',
-        'url'   => home_url('/service-areas/'),
-        'children' => [
-            [ 'label' => 'Seattle',  'url' => home_url('/service-areas/seattle/')  ],
-            [ 'label' => 'Bellevue', 'url' => home_url('/service-areas/bellevue/') ],
-            [ 'label' => 'Kirkland', 'url' => home_url('/service-areas/kirkland/') ],
-            [ 'label' => 'Renton',   'url' => home_url('/service-areas/renton/')   ],
-            [ 'label' => 'Tacoma',   'url' => home_url('/service-areas/tacoma/')   ],
-            [ 'label' => 'Redmond',  'url' => home_url('/service-areas/redmond/')  ],
-            [ 'label' => 'Kent',     'url' => home_url('/service-areas/kent/')     ],
-            [ 'label' => 'Bothell',  'url' => home_url('/service-areas/bothell/')  ],
-        ],
-    ],
-    [
-        'label'    => 'Fundraisers',
-        'url'      => home_url('/fundraisers/'),
-        'children' => [],
-    ],
-    [
-        'label'    => 'Events',
-        'url'      => home_url('/events/'),
-        'children' => [],
-    ],
-    [
-        'label'    => 'FAQ',
-        'url'      => home_url('/faq/'),
-        'children' => [],
-    ],
-    [
-        'label'    => 'About',
-        'url'      => home_url('/about/'),
-        'children' => [],
-    ],
-];
+/* Nav dropdowns data -- single canonical source, see includes/nav-tree.php */
+$tse_nav = tse_nav_tree();
 
-/* Current URL for active-state highlighting */
-$tse_current_url = ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+/* Current URL for active-state highlighting and canonical/schema use.
+ * Query string is stripped: this URL feeds <link rel="canonical"> and the
+ * JSON-LD `url` fields below, which must resolve to one clean address
+ * regardless of tracking params (?utm_*, ?cb=, etc.) on the request. */
+$tse_current_url = ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . strtok( $_SERVER['REQUEST_URI'], '?' );
 
 /* Structured data: Service + BreadcrumbList (schema.org) */
 $tse_schema_service = [
