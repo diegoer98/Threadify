@@ -11,6 +11,12 @@ GitHub → WP.com deployment, which ships **files only**.
 
 Issues are tracked in Linear — see **Issue tracking** at the end of this file.
 
+**Branches:** `main` is the only branch WP.com's GitHub Deployment is wired to (manual trigger,
+not on-push). `Beta` exists but is not connected to any deploy target — WP.com staging access
+was never obtained for it — so it currently has no functional meaning beyond a name. Don't
+assume merging to `Beta` is safer or gated differently than merging to `main`; right now
+neither one auto-deploys anything, and DB changes (see below) bypass both entirely.
+
 ## The single most important gotcha: most of the live site is not in this repo
 
 The five main pages (`/`, `/fundraisers/`, `/events/`, `/order-builder/`, `/product-details/`)
@@ -201,6 +207,19 @@ Rules for any DB change:
 5. **Post the verification output to the Linear ticket afterwards.** A merged PR containing
    only `db-content/` proves the fix was *written*, not that it is *live* — the Linear
    comment is the only deploy record a DB change ever gets.
+
+### The gate: PR approval before `--apply`, no exceptions
+
+BAM-5 went live on 2026-08-18 by running `--apply` straight over SSH, before the
+`db-content/BAM-5/` PR had a single review on it — the PR was opened *after* the fact, as a
+record, not a gate. That surprised the site owner and is not how this works going forward.
+
+**The `db-content/<TICKET>/` PR must be opened and have an approving review *before* anyone
+runs the real apply command** (`--apply` / `<TICKET>_APPLY=1`) against production. The dry
+run is safe to run anytime — it writes nothing — and its output belongs in the PR for the
+reviewer to check against the diff. Only after merge does the apply step run. There is no
+"I'll just apply it now and open the PR after" — that is the exact failure this rule exists
+to close off.
 
 ## Issue tracking
 
