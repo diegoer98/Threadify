@@ -41,7 +41,13 @@ add_filter( 'template_include', 'tse_template_include', 99 );
 function tse_template_include( $template ) {
     if ( tse_is_service_page() ) {
         $t = TSE_DIR . 'templates/service-page.php';
-        if ( file_exists( $t ) ) return $t;
+        if ( file_exists( $t ) ) {
+            // service-page.php prints its own <title>/meta/OG tags before calling
+            // wp_head(); without this, WP core's title-tag renderer fires a second
+            // time inside wp_head() and duplicates the <title> element.
+            remove_action( 'wp_head', '_wp_render_title_tag', 1 );
+            return $t;
+        }
     }
     return $template;
 }
@@ -61,20 +67,24 @@ function tse_document_title( $parts ) {
     return $parts;
 }
 
-// ── Meta description ───────────────────────────────────────────────
-add_action( 'wp_head', 'tse_meta_tags', 3 );
-function tse_meta_tags() {
+// ── Dequeue unused assets on service pages ───────────────────────────
+// These pages have zero storefront and their own inline vanilla-JS nav/FAQ
+// scripts (no jQuery dependency), so the default WooCommerce frontend
+// bundle is dead weight. Priority 100 so it runs after WooCommerce's own
+// wp_enqueue_scripts registration (default priority 10).
+add_action( 'wp_enqueue_scripts', 'tse_dequeue_unused_assets', 100 );
+function tse_dequeue_unused_assets() {
     if ( ! tse_is_service_page() ) return;
-    $post = get_queried_object();
-    $desc = get_post_meta( $post->ID, '_tse_meta_desc', true );
-    if ( $desc ) {
-        echo '<meta name="description" content="' . esc_attr( $desc ) . '">' . "\n";
-        echo '<meta property="og:description" content="' . esc_attr( $desc ) . '">' . "\n";
+
+    foreach ( [ 'wc-add-to-cart', 'jquery-blockui', 'js-cookie', 'woocommerce' ] as $handle ) {
+        wp_dequeue_script( $handle );
+        wp_deregister_script( $handle );
     }
-    $title = get_post_meta( $post->ID, '_tse_seo_title', true ) ?: get_the_title( $post->ID );
-    echo '<meta property="og:title" content="' . esc_attr( $title ) . '">' . "\n";
-    echo '<meta property="og:site_name" content="Threadify">' . "\n";
-    echo '<meta property="og:url" content="' . esc_url( get_permalink( $post->ID ) ) . '">' . "\n";
+
+    foreach ( [ 'woocommerce-general', 'woocommerce-layout', 'woocommerce-smallscreen', 'wc-blocks-style' ] as $handle ) {
+        wp_dequeue_style( $handle );
+        wp_deregister_style( $handle );
+    }
 }
 
 // ── Helper ─────────────────────────────────────────────────────────
