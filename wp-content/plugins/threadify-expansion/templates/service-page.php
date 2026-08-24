@@ -95,6 +95,49 @@ $tse_nav = [
 /* Current URL for active-state highlighting */
 $tse_current_url = ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
+/* Structured data: Service + BreadcrumbList (schema.org) */
+$tse_schema_service = [
+    '@context'    => 'https://schema.org',
+    '@type'       => 'Service',
+    'name'        => $tse_title,
+    'description' => $tse_desc ?: $tse_title,
+    'url'         => $tse_current_url,
+    'provider'    => [
+        '@type'     => 'LocalBusiness',
+        'name'      => 'Threadify Apparel',
+        'telephone' => '+1-253-249-1545',
+        'email'     => 'Orders@ThreadifyApparel.com',
+        'address'   => [
+            '@type'           => 'PostalAddress',
+            'addressLocality' => 'Federal Way',
+            'addressRegion'   => 'WA',
+            'addressCountry'  => 'US',
+        ],
+    ],
+];
+
+$tse_breadcrumb_items   = [ [ '@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $tse_home ] ];
+$tse_breadcrumb_position = 2;
+foreach ( $tse_ancestors as $anc_id ) {
+    $tse_breadcrumb_items[] = [
+        '@type'    => 'ListItem',
+        'position' => $tse_breadcrumb_position++,
+        'name'     => get_the_title( $anc_id ),
+        'item'     => get_permalink( $anc_id ),
+    ];
+}
+$tse_breadcrumb_items[] = [
+    '@type'    => 'ListItem',
+    'position' => $tse_breadcrumb_position,
+    'name'     => get_the_title(),
+    'item'     => $tse_current_url,
+];
+$tse_schema_breadcrumb = [
+    '@context'        => 'https://schema.org',
+    '@type'           => 'BreadcrumbList',
+    'itemListElement' => $tse_breadcrumb_items,
+];
+
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -109,6 +152,8 @@ $tse_current_url = ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?php echo esc_url( $tse_current_url ); ?>">
 <link rel="canonical" href="<?php echo esc_url( $tse_current_url ); ?>">
+<script type="application/ld+json"><?php echo wp_json_encode( $tse_schema_service, JSON_UNESCAPED_SLASHES ); ?></script>
+<script type="application/ld+json"><?php echo wp_json_encode( $tse_schema_breadcrumb, JSON_UNESCAPED_SLASHES ); ?></script>
 <?php wp_head(); ?>
 </head>
 <body class="tse-body">
