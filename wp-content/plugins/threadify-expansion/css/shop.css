@@ -1,0 +1,122 @@
+/* ============================================================
+   Threadify Expansion — /shop/ page styles
+   ============================================================
+   Ported near-verbatim from the live homepage's #industries and
+   #work sections (fetched 2026-08-24) for visual parity, scoped
+   under #tse-shop instead of the homepage's #tdfy wrapper.
+   Requires tokens.css to be enqueued first.
+*/
+
+#tse-shop .wrap { width: 100%; max-width: var(--tdfy-maxw); margin: 0 auto; padding: 0 24px; }
+
+#tse-shop .eyebrow {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--tdfy-brass);
+}
+
+#tse-shop .section-head { max-width: 40em; margin-bottom: 44px; }
+#tse-shop .section-head h2 { font-size: clamp(2.4rem, 5vw, 3.6rem); color: var(--tdfy-ink); margin-top: 8px; }
+#tse-shop .section-head p { color: var(--tdfy-stone); margin-top: 14px; font-size: 1.04rem; }
+
+/* ---------- Buttons (only used by the #work empty-state CTA) ---------- */
+#tse-shop .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 13px 24px;
+  border-radius: var(--tdfy-radius);
+  border: 1px solid var(--tdfy-forest);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+#tse-shop .btn-primary { background: var(--tdfy-forest); color: var(--tdfy-cream); }
+#tse-shop .btn-primary:hover { background: var(--tdfy-brass); border-color: var(--tdfy-brass); color: var(--tdfy-ink); }
+
+/* ---------- Shop by Industry (stacked tabs + photo panel) ---------- */
+#tse-shop .ind-layout { display: grid; grid-template-columns: 380px 1fr; gap: 26px; align-items: stretch; }
+#tse-shop .ind-tabs { display: flex; flex-direction: column; gap: 4px; }
+
+#tse-shop .ind-tab {
+  display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+  background: transparent; border: 1px solid transparent; border-radius: var(--tdfy-radius);
+  padding: 13px 16px; cursor: pointer; transition: .15s ease; font-family: 'Inter', sans-serif;
+}
+#tse-shop .ind-tab:hover { background: var(--tdfy-cream); }
+#tse-shop .ind-tab.active { background: var(--tdfy-parchment); border-color: var(--tdfy-brass); }
+#tse-shop .ind-tab .ic { font-size: 1.5rem; line-height: 1; flex: 0 0 auto; width: 1.6em; text-align: center; }
+#tse-shop .ind-tab .tab-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+#tse-shop .ind-tab h3 { font-size: 1.12rem; color: var(--tdfy-forest); font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0; }
+#tse-shop .ind-tab p { margin: 0; font-size: 0.8rem; color: var(--tdfy-stone); line-height: 1.35; }
+
+#tse-shop .ind-photo-panel {
+  position: relative; display: block; border-radius: var(--tdfy-radius); overflow: hidden;
+  border: var(--tdfy-border); background: var(--tdfy-parchment); min-height: 460px;
+}
+#tse-shop .ind-photo-panel img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: opacity .3s ease;
+}
+#tse-shop .ind-photo-cap {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 26px;
+  background: linear-gradient(to top, rgba(26,26,24,0.82), rgba(26,26,24,0));
+  color: var(--tdfy-cream);
+}
+#tse-shop .ind-photo-cap .pt { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; letter-spacing: 0.02em; }
+#tse-shop .ind-photo-cap .go { margin-top: 4px; font-size: 0.82rem; font-weight: 600; color: var(--tdfy-cream); opacity: 0.92; }
+#tse-shop .ind-photo-panel:hover .go { text-decoration: underline; }
+
+#tse-shop .shop-note { margin-top: 26px; font-size: 0.86rem; color: var(--tdfy-stone); }
+
+/* ---------- Work / gallery ---------- */
+#tse-shop .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+#tse-shop .filter-btn {
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+  padding: 9px 18px; border-radius: 100px; cursor: pointer;
+  background: transparent; color: var(--tdfy-ink); border: 1px solid rgba(26,26,24,0.18);
+  transition: .15s ease;
+}
+#tse-shop .filter-btn:hover { border-color: var(--tdfy-brass); color: var(--tdfy-brass); }
+#tse-shop .filter-btn.active { background: var(--tdfy-forest); color: var(--tdfy-cream); border-color: var(--tdfy-forest); }
+
+#tse-shop .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+#tse-shop .tile {
+  border: var(--tdfy-border); border-radius: var(--tdfy-radius); overflow: hidden;
+  background: var(--tdfy-parchment); position: relative; aspect-ratio: 4 / 5;
+}
+#tse-shop .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+#tse-shop .tile:hover img { transform: scale(1.04); }
+#tse-shop .tile .cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 14px 16px;
+  background: rgba(26,26,24,0.72);
+  color: var(--tdfy-cream);
+}
+#tse-shop .tile .cap .t { font-weight: 600; font-size: 0.95rem; }
+#tse-shop .tile .cap .s { font-size: 0.76rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.08em; }
+
+#tse-shop .empty-state {
+  grid-column: 1 / -1; text-align: center; padding: 56px 20px;
+  border: 1px dashed rgba(26,26,24,0.22); border-radius: var(--tdfy-radius);
+  background: var(--tdfy-cream); color: var(--tdfy-stone);
+}
+#tse-shop .empty-state.hide { display: none; }
+#tse-shop .empty-state h3 { color: var(--tdfy-forest); font-size: 1.8rem; margin-bottom: 8px; }
+#tse-shop .empty-state p { margin: 0 auto 18px; max-width: 30em; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 920px) {
+  #tse-shop .ind-layout { grid-template-columns: 1fr; }
+  #tse-shop .ind-photo-panel { min-height: 280px; order: -1; }
+  #tse-shop .gallery { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  #tse-shop .gallery { grid-template-columns: 1fr; }
+}

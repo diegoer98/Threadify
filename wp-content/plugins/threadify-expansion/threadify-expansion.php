@@ -14,6 +14,7 @@ define( 'TSE_VERSION', '1.1.1' );
 define( 'TSE_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'TSE_URL',     plugin_dir_url( __FILE__ ) );
 
+require_once TSE_DIR . 'includes/cart-module.php';
 require_once TSE_DIR . 'includes/page-content.php';
 require_once TSE_DIR . 'includes/create-pages.php';
 require_once TSE_DIR . 'includes/create-menu.php';
@@ -33,6 +34,10 @@ add_action( 'wp_enqueue_scripts', 'tse_enqueue' );
 function tse_enqueue() {
     if ( tse_is_service_page() ) {
         wp_enqueue_style( 'tse-styles', TSE_URL . 'css/styles.css', [], TSE_VERSION );
+    }
+    if ( is_page( 'shop' ) ) {
+        wp_enqueue_style( 'tse-tokens', TSE_URL . 'css/tokens.css', [], TSE_VERSION );
+        wp_enqueue_style( 'tse-shop', TSE_URL . 'css/shop.css', [ 'tse-tokens' ], TSE_VERSION );
     }
 }
 

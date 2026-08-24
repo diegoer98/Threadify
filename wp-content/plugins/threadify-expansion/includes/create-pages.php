@@ -25,6 +25,16 @@ function tse_create_all_pages() {
 function tse_page_definitions() {
     return [
 
+        /* ── SHOP ──────────────────────────────────── */
+        [
+            'slug'        => 'shop',
+            'title'       => 'Shop',
+            'parent_slug' => '',
+            'seo_title'   => 'Shop Blank Apparel by Industry | Threadify',
+            'meta_desc'   => 'Browse real SanMar & Carhartt garments by industry, see recent embroidery and DTF work, and start a free quote — no payment up front.',
+            'content_fn'  => 'tse_content_shop',
+        ],
+
         /* ── EMBROIDERY PARENT ─────────────────────── */
         [
             'slug'        => 'embroidery',
