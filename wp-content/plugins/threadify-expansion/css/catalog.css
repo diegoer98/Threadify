@@ -1,0 +1,179 @@
+/* ============================================================
+   Threadify Expansion — /catalog/ and /industries/ (BETA DRAFTS)
+   ============================================================
+   Loads after styles.css and reuses its :root custom properties
+   (--bg, --surface, --surface2, --gold, --gold-lt, --text, --muted,
+   --border, --radius). Scoped to .tcat-* / .tind-* so nothing here
+   collides with styles.css, brands.css or the incoming tokens.css.
+   ============================================================ */
+
+/* ── Garment / fit grid ───────────────────────── */
+.tcat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+  gap: 16px;
+  margin-top: 1.75rem;
+}
+
+.tcat-grid-sm {
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+}
+
+.tcat-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface2, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  transition: border-color .15s ease, transform .15s ease;
+}
+
+.tcat-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+/* Product shots are 300x450 on white; the tinted panel keeps the
+   ragged cut-outs from floating on the card. */
+.tcat-shot {
+  display: block;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.tcat-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.tcat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 13px 14px 15px;
+}
+
+.tcat-name {
+  font-weight: 700;
+  font-size: .9375rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.tcat-meta {
+  font-size: .8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tcat-from {
+  margin-top: 2px;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.tcat-fits { border-top: 1px solid var(--border); }
+
+/* ── Cross-links ──────────────────────────────── */
+.tcat-routes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 1.25rem;
+}
+
+.tcat-route {
+  display: block;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.tcat-route:hover {
+  background: var(--surface2, #fff);
+  border-color: var(--gold);
+  text-decoration: none;
+}
+
+.tcat-route strong {
+  display: block;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.tcat-route span {
+  display: block;
+  font-size: .875rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ── Industry grid ────────────────────────────── */
+.tind-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(266px, 1fr));
+  gap: 14px;
+  margin-top: 1.75rem;
+}
+
+.tind-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px 16px;
+  background: var(--surface2, #fff);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: border-left-color .15s ease, transform .15s ease;
+}
+
+.tind-card:hover {
+  border-left-color: var(--gold-lt);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.tind-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.tind-blurb {
+  font-size: .875rem;
+  color: var(--muted);
+  line-height: 1.55;
+  flex: 1 1 auto;
+}
+
+.tind-go {
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 4px;
+}
+
+/* ── Narrow screens ───────────────────────────── */
+@media (max-width: 600px) {
+  .tcat-grid,
+  .tcat-grid-sm {
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 12px;
+  }
+  .tcat-body { padding: 11px 12px 13px; }
+  .tind-grid { grid-template-columns: 1fr; }
+}

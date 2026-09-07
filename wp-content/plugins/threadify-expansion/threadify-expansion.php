@@ -27,6 +27,10 @@ require_once TSE_DIR . 'includes/brands.php';
 // until the flag is flipped.
 require_once TSE_DIR . 'includes/homepage-brands.php';
 
+// BETA DRAFTS — /catalog/ (browse by garment) and /industries/ (browse by
+// trade). Both noindex and unlinked, same as /brands/.
+require_once TSE_DIR . 'includes/catalog-pages.php';
+
 // ── Lifecycle ──────────────────────────────────────────────────────
 register_activation_hook( __FILE__, 'tse_activate' );
 
