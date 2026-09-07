@@ -143,16 +143,9 @@ function tse_content_brands() {
 
 	$html = '
 <div class="tse-hero">
-  <h1>Brands We Stitch and Print On</h1>
-  <p>Threadify decorates blanks from the same catalog the big shops buy from &mdash; so you get real brands at real wholesale, decorated in Federal Way by the two of us. Pick a brand you already trust, or tell us the budget and we&rsquo;ll match it.</p>
+  <h1>Brands We Carry</h1>
+  <p>All of your favorite brands in one place.</p>
   ' . tse_cta_btn( 'Get a Free Quote' ) . '
-</div>';
-
-	$html .= '
-<div class="tse-section">
-  <h2>How this works</h2>
-  <p>We source blanks through SanMar, the largest wholesale apparel supplier in the country. That means you are not limited to what is on this page &mdash; if a brand is in their catalog, we can usually get it. These are simply the lines we work with most often, and the ones we can quote fastest.</p>
-  <p>Every garment below is a <em>blank</em>. The price you get from us is the blank plus decoration &mdash; embroidery, DTF, patches or heat press &mdash; quoted before anything goes on a machine.</p>
 </div>';
 
 	// Brand groups.
@@ -179,31 +172,24 @@ function tse_content_brands() {
 </div>';
 	}
 
-	// Industry shortcuts — deep-links into the existing order builder.
 	$html .= '
 <div class="tse-section">
-  <h2>Or start from what you do</h2>
-  <p>Not sure which brand you want? Start with your industry and we&rsquo;ll show you the pieces that suit it.</p>
-  <ul class="tfb-industries">';
+  <h2>Other ways in</h2>
+  <div class="tcat-routes">
+    <a class="tcat-route" href="' . esc_url( home_url( '/catalog/' ) ) . '">
+      <strong>Browse the full catalog</strong>
+      <span>Start from the garment.</span>
+    </a>
+    <a class="tcat-route" href="' . esc_url( home_url( '/industries/' ) ) . '">
+      <strong>Shop by industry</strong>
+      <span>Start from your trade.</span>
+    </a>
+  </div>
+</div>
 
-	foreach ( tse_brand_industries() as $slug => $industry ) {
-		$html .= '
-    <li>
-      <a href="' . esc_url( home_url( '/order-builder/?industry=' . $slug ) ) . '">
-        <strong>' . esc_html( $industry['name'] ) . '</strong>
-        <span>' . esc_html( $industry['blurb'] ) . '</span>
-      </a>
-    </li>';
-	}
-
-	$html .= '
-  </ul>
-</div>';
-
-	$html .= '
 <div class="tse-section tfb-closing">
   <h2>Don&rsquo;t see what you need?</h2>
-  <p>Send us the brand and style number, or just describe the piece. If SanMar carries it we can quote it, and if they don&rsquo;t we will tell you straight rather than talk you into something else.</p>
+  <p>Send us the brand and style number and we&rsquo;ll quote it.</p>
   ' . tse_cta_btn( 'Ask About a Brand' ) . '
 </div>';
 
@@ -259,7 +245,10 @@ add_action( 'wp_enqueue_scripts', 'tse_brands_enqueue', 20 );
 
 function tse_brands_enqueue() {
 	if ( ! tse_is_brands_page() ) return;
-	wp_enqueue_style( 'tse-brands', TSE_URL . 'css/brands.css', [ 'tse-styles' ], TSE_VERSION );
+	// catalog.css carries the shared .tcat-route cross-links used at the foot
+	// of this page, so it loads first.
+	wp_enqueue_style( 'tse-catalog', TSE_URL . 'css/catalog.css', [ 'tse-styles' ], TSE_VERSION );
+	wp_enqueue_style( 'tse-brands',  TSE_URL . 'css/brands.css',  [ 'tse-catalog' ], TSE_VERSION );
 }
 
 // ── Beta guard: keep this page out of search results ────────────────

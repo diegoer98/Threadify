@@ -31,6 +31,10 @@ require_once TSE_DIR . 'includes/homepage-brands.php';
 // trade). Both noindex and unlinked, same as /brands/.
 require_once TSE_DIR . 'includes/catalog-pages.php';
 
+// BETA DRAFTS — one filterable listing page per catalog facet, e.g.
+// /catalog/outerwear/. Renders at request time from uploads/catalog-data/.
+require_once TSE_DIR . 'includes/catalog-browse.php';
+
 // ── Lifecycle ──────────────────────────────────────────────────────
 register_activation_hook( __FILE__, 'tse_activate' );
 

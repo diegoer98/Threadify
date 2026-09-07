@@ -1,0 +1,193 @@
+/* ============================================================
+   Threadify Expansion — Catalog browse pages (BETA DRAFTS)
+   ============================================================
+   Loads after catalog.css; reuses styles.css's :root properties.
+   Scoped to .tbr-*.
+   ============================================================ */
+
+.tbr-hero { padding-bottom: 1.25rem; }
+
+.tbr-crumb {
+  font-size: .8125rem;
+  color: var(--muted);
+  margin-bottom: .5rem;
+}
+.tbr-crumb a { color: var(--gold); }
+
+.tbr-count {
+  font-size: .9375rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+/* ── Filter bar ───────────────────────────────── */
+.tbr-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px 28px;
+  padding: 16px 18px;
+  margin-bottom: 1.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.tbr-frow { display: flex; flex-direction: column; gap: 7px; }
+
+.tbr-lbl {
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tbr-select {
+  min-width: 200px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: .875rem;
+  background: var(--surface2, #fff);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+}
+
+/* Colour swatches */
+.tbr-sws { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.tbr-sw {
+  width: 26px; height: 26px;
+  padding: 0;
+  border: 1px solid rgba(26, 26, 24, .28);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.tbr-sw:hover { transform: scale(1.1); }
+.tbr-sw[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold);
+}
+
+/* Size chips */
+.tbr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.tbr-chip {
+  padding: 5px 11px;
+  font: inherit;
+  font-size: .8125rem;
+  font-weight: 600;
+  background: var(--surface2, #fff);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.tbr-chip:hover { border-color: var(--gold); }
+.tbr-chip[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+.tbr-clear {
+  align-self: flex-end;
+  margin-left: auto;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: .8125rem;
+  font-weight: 600;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.tbr-clear:hover { border-color: var(--gold); color: var(--gold); }
+
+.tbr-sw:focus-visible,
+.tbr-chip:focus-visible,
+.tbr-clear:focus-visible,
+.tbr-select:focus-visible {
+  outline: 2px solid var(--gold-lt);
+  outline-offset: 2px;
+}
+
+/* ── Product grid ─────────────────────────────── */
+.tbr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.tbr-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface2, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tbr-shot {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.tbr-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+.tbr-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 13px 14px;
+}
+
+.tbr-brand {
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.tbr-title {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.tbr-meta {
+  font-size: .75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.tbr-empty {
+  padding: 2.5rem 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.tbr-more { text-align: center; margin-top: 2rem; }
+
+/* ── Narrow screens ───────────────────────────── */
+@media (max-width: 600px) {
+  .tbr-filters { gap: 14px 18px; padding: 14px; }
+  .tbr-select { min-width: 0; width: 100%; }
+  .tbr-clear { margin-left: 0; align-self: flex-start; }
+  .tbr-grid { grid-template-columns: repeat(auto-fill, minmax(144px, 1fr)); gap: 12px; }
+}

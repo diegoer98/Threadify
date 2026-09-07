@@ -58,47 +58,6 @@
   line-height: 1.3;
 }
 
-/* ── Industry list ────────────────────────────── */
-.tfb-industries {
-  list-style: none;
-  margin: 1.5rem 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 12px;
-}
-
-.tfb-industries a {
-  display: block;
-  height: 100%;
-  padding: 16px 18px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: border-color .15s ease, background .15s ease;
-}
-
-.tfb-industries a:hover {
-  background: var(--surface2, #fff);
-  border-color: var(--gold);
-  text-decoration: none;
-}
-
-.tfb-industries strong {
-  display: block;
-  color: var(--gold);
-  font-size: 1rem;
-  margin-bottom: 4px;
-}
-
-.tfb-industries span {
-  display: block;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.55;
-}
-
 /* ── Closing block ────────────────────────────── */
 .tfb-closing {
   border-top: 1px solid var(--border);
