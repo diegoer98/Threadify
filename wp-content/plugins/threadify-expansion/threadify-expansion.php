@@ -18,6 +18,10 @@ require_once TSE_DIR . 'includes/page-content.php';
 require_once TSE_DIR . 'includes/create-pages.php';
 require_once TSE_DIR . 'includes/create-menu.php';
 
+// BETA — /brands/. Self-contained; registers its own activation hook, styles
+// and meta. Remove this line to switch the page off entirely.
+require_once TSE_DIR . 'includes/brands.php';
+
 // ── Lifecycle ──────────────────────────────────────────────────────
 register_activation_hook( __FILE__, 'tse_activate' );
 
