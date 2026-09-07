@@ -22,6 +22,11 @@ require_once TSE_DIR . 'includes/create-menu.php';
 // and meta. Remove this line to switch the page off entirely.
 require_once TSE_DIR . 'includes/brands.php';
 
+// BETA — homepage brand carousel + catalog move. Gated behind
+// TFB_HOMEPAGE_PATCH, which is false in that file; loading it changes nothing
+// until the flag is flipped.
+require_once TSE_DIR . 'includes/homepage-brands.php';
+
 // ── Lifecycle ──────────────────────────────────────────────────────
 register_activation_hook( __FILE__, 'tse_activate' );
 
