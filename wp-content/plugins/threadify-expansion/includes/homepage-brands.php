@@ -154,24 +154,20 @@ function tse_inject_homepage_brands() {
 .tfb-band .wrap { max-width: var(--maxw, 1180px); margin: 0 auto; padding: 0 20px; }
 
 .tfb-band .tfb-head { text-align: center; margin-bottom: 32px; }
-.tfb-band .tfb-eyebrow {
-  display: block;
-  font-size: .75rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--brass, #B8922A);
-  margin-bottom: 8px;
-}
 .tfb-band h2 {
-  margin: 0 0 10px;
+  margin: 0;
   color: var(--ink, #1A1A18);
   text-wrap: balance;
 }
-.tfb-band .tfb-sub {
-  margin: 0 auto;
-  max-width: 60ch;
-  color: var(--stone, #6B6B60);
-}
+
+/* The homepage leads every section with an eyebrow, a headline and an
+   explanatory paragraph. The paragraphs are dropped so the page reads as
+   a set of destinations rather than a wall of copy. The About story and the
+   pricing bullet list are left alone — those are the section's content, not
+   a caption under a heading. */
+#tdfy .section-head p,
+#tdfy #pricing .promise p.sub,
+#tdfy #contact .contact-copy > p:first-of-type { display: none; }
 
 /* Carousel shell: arrows flank a fixed-height track. */
 .tfb-car { display: flex; align-items: center; gap: 12px; }
@@ -205,19 +201,19 @@ function tse_inject_homepage_brands() {
   background: #fff;
   border: var(--border, 1px solid rgba(26,26,24,.12));
   border-radius: var(--radius, 6px);
-  min-height: 92px;
-  padding: 14px 12px;
+  min-height: 112px;
+  padding: 16px 12px;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 8px;
+  align-items: center; justify-content: center; gap: 10px;
 }
-.tfb-cell img { height: 34px; width: auto; max-width: 100%; object-fit: contain; display: block; }
+.tfb-cell img { height: 38px; width: auto; max-width: 100%; object-fit: contain; display: block; }
 .tfb-cell span {
-  font-size: .75rem; font-weight: 600;
-  color: var(--stone, #6B6B60);
-  text-align: center; line-height: 1.3;
+  font-size: .9375rem; font-weight: 700;
+  color: var(--ink, #1A1A18);
+  text-align: center; line-height: 1.25;
 }
 
-.tfb-dots { display: flex; justify-content: center; gap: 7px; margin-top: 22px; }
+.tfb-dots { display: flex; justify-content: center; gap: 7px; margin-top: 24px; }
 .tfb-dot {
   width: 8px; height: 8px; padding: 0;
   border-radius: 50%; border: 0; cursor: pointer;
@@ -227,16 +223,14 @@ function tse_inject_homepage_brands() {
 .tfb-dot[aria-current="true"] { background: var(--forest, #2E4A35); }
 .tfb-dot:focus-visible { outline: 2px solid var(--brass, #B8922A); outline-offset: 2px; }
 
-.tfb-more { text-align: center; margin: 20px 0 0; }
-.tfb-more a { color: var(--forest, #2E4A35); font-weight: 600; }
-
 @media (max-width: 900px) { .tfb-track { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 560px) {
   .tfb-band { padding: 44px 0; }
   .tfb-track { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .tfb-arrow { width: 36px; height: 36px; }
-  .tfb-cell { min-height: 78px; }
-  .tfb-cell img { height: 28px; }
+  .tfb-cell { min-height: 96px; padding: 13px 10px; }
+  .tfb-cell img { height: 32px; }
+  .tfb-cell span { font-size: .875rem; }
 }
 </style>
 
@@ -263,10 +257,7 @@ function tse_inject_homepage_brands() {
     band.innerHTML =
       '<div class="wrap">' +
         '<div class="tfb-head">' +
-          '<span class="tfb-eyebrow">Brands we supply</span>' +
           '<h2>Names you already trust.</h2>' +
-          '<p class="tfb-sub">We decorate blanks from the same catalog the big shops buy from. ' +
-            'Pick a brand you know, or tell us your budget and we&rsquo;ll match it.</p>' +
         '</div>' +
         '<div class="tfb-car">' +
           '<button type="button" class="tfb-arrow" data-dir="-1" aria-label="Show previous brands">&#8249;</button>' +
@@ -274,7 +265,6 @@ function tse_inject_homepage_brands() {
           '<button type="button" class="tfb-arrow" data-dir="1" aria-label="Show next brands">&#8250;</button>' +
         '</div>' +
         '<div class="tfb-dots" id="tfb-dots"></div>' +
-        '<p class="tfb-more"><a href="' + CFG.brandsUrl + '">See every brand we carry &rarr;</a></p>' +
       '</div>';
 
     hero.parentNode.insertBefore(band, hero.nextSibling);
