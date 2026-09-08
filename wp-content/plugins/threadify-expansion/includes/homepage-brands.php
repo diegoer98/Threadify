@@ -12,9 +12,18 @@
  *
  * WHY JAVASCRIPT: the homepage is not rendered by any file in this repo. Its
  * markup is raw post_content in the database, echoed by code-snippets snippet
- * id=6, so a template edit cannot touch it. Patching the DOM from wp_footer is
- * the pattern already established here by tse_inject_homepage_nav(); the
- * alternative is a gated db-content/<TICKET>/ script applied over WP-CLI.
+ * id=6, so a template edit cannot touch it. The alternative is a gated
+ * db-content/<TICKET>/ script applied over WP-CLI.
+ *
+ * WHY NOT wp_footer: snippet id=6 echoes a complete document and exits on
+ * template_redirect, so wp_footer() never runs on the homepage — fetching the
+ * live page shows no wp-includes assets and no footer output at all, and the
+ * document simply ends "</div></body></html>". tse_inject_homepage_nav() hooks
+ * wp_footer and is therefore dead on the homepage today, which is worth knowing
+ * before trusting that pattern. This file instead opens an output buffer ahead
+ * of the snippet and rewrites the HTML on its way out, which works whether or
+ * not the snippet exits early (PHP flushes buffers, running their callbacks, at
+ * shutdown).
  *
  * ─────────────────────────────────────────────────────────────────────
  * THIS IS OFF BY DEFAULT AND MUST STAY OFF UNTIL THE CATALOG PAGE EXISTS.
@@ -94,14 +103,42 @@ function tse_homepage_brand_order() {
 }
 
 // ── Injection ───────────────────────────────────────────────────────
-add_action( 'wp_footer', 'tse_inject_homepage_brands', 20 );
+// Priority 0 so the buffer opens before snippet id=6 echoes the page.
+add_action( 'template_redirect', 'tse_homepage_buffer', 0 );
+
+function tse_homepage_buffer() {
+	if ( ! TFB_HOMEPAGE_PATCH ) return;
+	if ( ! is_front_page() && ! is_home() ) return;
+	ob_start( 'tse_homepage_inject_filter' );
+}
+
+/**
+ * Splices the carousel markup in before </body>. Returns the document
+ * untouched if there's no closing body tag to anchor to.
+ *
+ * @param string $html
+ * @return string
+ */
+function tse_homepage_inject_filter( $html ) {
+
+	if ( stripos( $html, '</body>' ) === false ) return $html;
+	if ( strpos( $html, 'tfb-home-js' ) !== false ) return $html;   // already patched
+
+	ob_start();
+	tse_inject_homepage_brands();
+	$payload = ob_get_clean();
+
+	if ( $payload === '' ) return $html;
+
+	$pos = strripos( $html, '</body>' );
+	return substr( $html, 0, $pos ) . $payload . substr( $html, $pos );
+}
 
 function tse_inject_homepage_brands() {
 
 	if ( ! TFB_HOMEPAGE_PATCH ) return;
-	if ( ! is_front_page() && ! is_home() ) return;
 
-	$brands  = tse_homepage_brand_order();
+	$brands = tse_homepage_brand_order();
 	if ( ! $brands ) return;
 
 	$payload = wp_json_encode( [
