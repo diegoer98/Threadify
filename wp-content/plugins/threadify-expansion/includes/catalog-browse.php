@@ -137,6 +137,12 @@ function tse_browse_render_content( $content ) {
      data-src="<?php echo esc_url( tse_browse_data_base() . $facet . '.txt' ); ?>">
 
   <div class="tbr-filters">
+    <!-- Hidden by the script on facets that only contain one gender, e.g. /catalog/womens/. -->
+    <div class="tbr-frow" id="tbr-genrow" hidden>
+      <span class="tbr-lbl">Gender</span>
+      <div class="tbr-chips" id="tbr-genders"></div>
+    </div>
+
     <div class="tbr-frow">
       <label class="tbr-lbl" for="tbr-brand">Brand</label>
       <select id="tbr-brand" class="tbr-select"><option value="">All brands</option></select>
@@ -185,8 +191,10 @@ function tse_browse_script() {
   if (!wrap) return;
 
   var PAGE = 48;                      // cards revealed per "Show more"
+  var GENDERS = { m: "Men's & Unisex", w: "Women's", y: "Youth" };
+
   var all = [], shown = PAGE;
-  var f = { brand: "", colours: [], sizes: [] };
+  var f = { brand: "", colours: [], sizes: [], genders: [] };
 
   var grid   = document.getElementById("tbr-grid");
   var count  = document.getElementById("tbr-count");
@@ -195,9 +203,12 @@ function tse_browse_script() {
   var clear  = document.getElementById("tbr-clear");
   var brandS = document.getElementById("tbr-brand");
   var sizeC  = document.getElementById("tbr-sizes");
+  var genC   = document.getElementById("tbr-genders");
+  var genRow = document.getElementById("tbr-genrow");
 
   function matches(it) {
     if (f.brand && it.b !== f.brand) return false;
+    if (f.genders.length && f.genders.indexOf(it.g) === -1) return false;
     if (f.colours.length && !f.colours.some(function (c) { return it.c.indexOf(c) > -1; })) return false;
     if (f.sizes.length && !f.sizes.some(function (s) { return it.z.indexOf(s) > -1; })) return false;
     return true;
@@ -226,7 +237,7 @@ function tse_browse_script() {
     grid.innerHTML = hits.slice(0, shown).map(card).join("");
     empty.hidden = hits.length > 0;
     more.hidden  = hits.length <= shown;
-    clear.hidden = !(f.brand || f.colours.length || f.sizes.length);
+    clear.hidden = !(f.brand || f.colours.length || f.sizes.length || f.genders.length);
   }
 
   function reset() { shown = PAGE; render(); }
@@ -237,6 +248,29 @@ function tse_browse_script() {
       // Line 1 is the human header; the JSON payload is line 2.
       var data = JSON.parse(txt.slice(txt.indexOf("\n") + 1));
       all = data.items || [];
+
+      // Only worth offering where the facet actually mixes genders — on
+      // /catalog/womens/ or /catalog/youth/ every item is the same.
+      var present = Object.keys(data.genders || {}).filter(function (k) {
+        return data.genders[k] > 0 && GENDERS[k];
+      });
+
+      if (present.length > 1) {
+        genRow.hidden = false;
+        present.forEach(function (g) {
+          var b = document.createElement("button");
+          b.type = "button"; b.className = "tbr-chip";
+          b.textContent = GENDERS[g] + " (" + data.genders[g] + ")";
+          b.setAttribute("aria-pressed", "false");
+          b.addEventListener("click", function () {
+            var i = f.genders.indexOf(g);
+            if (i > -1) { f.genders.splice(i, 1); b.setAttribute("aria-pressed", "false"); }
+            else { f.genders.push(g); b.setAttribute("aria-pressed", "true"); }
+            reset();
+          });
+          genC.appendChild(b);
+        });
+      }
 
       Object.keys(data.brands || {}).forEach(function (b) {
         var o = document.createElement("option");
@@ -277,7 +311,7 @@ function tse_browse_script() {
   more.addEventListener("click", function () { shown += PAGE; render(); });
 
   clear.addEventListener("click", function () {
-    f = { brand: "", colours: [], sizes: [] };
+    f = { brand: "", colours: [], sizes: [], genders: [] };
     brandS.value = "";
     wrap.querySelectorAll('[aria-pressed="true"]').forEach(function (el) {
       el.setAttribute("aria-pressed", "false");
