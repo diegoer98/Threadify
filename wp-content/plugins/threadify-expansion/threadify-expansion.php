@@ -31,6 +31,10 @@ require_once TSE_DIR . 'includes/homepage-buffer.php';
 // until the flag is flipped.
 require_once TSE_DIR . 'includes/homepage-brands.php';
 
+// BETA — the same eight top tabs on every page, database and plugin alike.
+// Rides TFB_HOMEPAGE_PATCH, since Catalog replaces the homepage's Shop section.
+require_once TSE_DIR . 'includes/site-nav.php';
+
 // BETA — heat press removed, quote form takes up to 10 files. Gated behind
 // TFB_HOMEPAGE_CONTENT, separately from the carousel so it can ship alone.
 require_once TSE_DIR . 'includes/homepage-content.php';

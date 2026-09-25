@@ -92,6 +92,9 @@ $tse_nav = [
     ],
 ];
 
+/* Lets other modules reshape the menu without editing this list. */
+$tse_nav = apply_filters( 'tse_nav_items', $tse_nav );
+
 /* Current URL for active-state highlighting */
 $tse_current_url = ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 

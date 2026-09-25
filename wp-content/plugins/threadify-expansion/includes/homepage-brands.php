@@ -37,17 +37,9 @@ if ( ! defined( 'TFB_HOMEPAGE_PATCH' ) ) {
 	define( 'TFB_HOMEPAGE_PATCH', false );
 }
 
-/**
- * Where the "Catalog" tab points.
- *
- * Defaults to /shop/ because the shop-by-industry content has already been
- * ported there verbatim — same eyebrow, headline, #indTabs markup and all 13
- * industry tabs. Rebuilding it under /catalog/ would duplicate that work, so
- * this points at the existing page instead. Change the value here if the page
- * is ever renamed.
- */
+/** Where every "Catalog" tab points — the page built in catalog-pages.php. */
 if ( ! defined( 'TFB_CATALOG_URL' ) ) {
-	define( 'TFB_CATALOG_URL', '/shop/' );
+	define( 'TFB_CATALOG_URL', '/catalog/' );
 }
 
 /**

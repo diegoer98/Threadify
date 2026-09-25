@@ -10,18 +10,24 @@
  * HTML on its way out.
  *
  * This opens one buffer, ahead of the snippet, and passes the finished
- * document through a per-page filter: `tse_homepage_html` or
- * `tse_events_html`. Each change hooks its page's filter behind its own on/off
- * flag, so they ship independently. When nothing is hooked for the current
- * page, no buffer is opened at all.
+ * document through `tse_db_page_html` (every database page) and then its
+ * page's own filter — `tse_homepage_html`, `tse_events_html`, and so on. Each
+ * change hooks a filter behind its own on/off flag, so they ship
+ * independently. When nothing is hooked for the current page, no buffer is
+ * opened at all.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/** Which filter, if any, applies to this request. */
+/**
+ * The page-specific filter for this request, or '' if it isn't one of the
+ * database-rendered pages.
+ */
 function tse_buffered_page_filter() {
 	if ( is_front_page() || is_home() ) return 'tse_homepage_html';
-	if ( is_page( 'events' ) )          return 'tse_events_html';
+	foreach ( [ 'events', 'fundraisers', 'order-builder', 'product-details' ] as $slug ) {
+		if ( is_page( $slug ) ) return 'tse_' . str_replace( '-', '_', $slug ) . '_html';
+	}
 	return '';
 }
 
@@ -30,7 +36,8 @@ add_action( 'template_redirect', 'tse_homepage_buffer', 0 );
 
 function tse_homepage_buffer() {
 	$filter = tse_buffered_page_filter();
-	if ( $filter === '' || ! has_filter( $filter ) ) return;
+	if ( $filter === '' ) return;
+	if ( ! has_filter( 'tse_db_page_html' ) && ! has_filter( $filter ) ) return;
 	ob_start( 'tse_homepage_buffer_flush' );
 }
 
@@ -43,6 +50,7 @@ function tse_homepage_buffer() {
  */
 function tse_homepage_buffer_flush( $html ) {
 	if ( stripos( $html, '</body>' ) === false ) return $html;
+	$html = apply_filters( 'tse_db_page_html', $html );
 	return apply_filters( tse_buffered_page_filter(), $html );
 }
 
