@@ -51,8 +51,8 @@ if ( ! defined( 'TFB_CATALOG_URL' ) ) {
 }
 
 /**
- * Every brand, ordered by public recognition — the names a customer is most
- * likely to know come first, so page one of the carousel does the most work.
+ * The 20 best-known brands, most recognisable first. The homepage shows only
+ * these; the full list of 39 lives on /brands/, linked from the footer.
  * Files resolve against uploads/brands/ and are shared with the /brands/ page.
  *
  * @return array<int,array{name:string,file:string}>
@@ -60,21 +60,13 @@ if ( ! defined( 'TFB_CATALOG_URL' ) ) {
 function tse_homepage_brand_order() {
 
 	$order = [
-		// Page 1 — household names.
+		// Household names.
 		'Nike Golf', 'Carhartt', 'The North Face', 'Champion', 'Eddie Bauer',
 		'New Era', 'Brooks Brothers', 'Tommy Bahama', 'BELLA+CANVAS', 'Gildan',
 
-		// Page 2 — widely known in apparel and decorating.
+		// Widely known in apparel and decorating.
 		'Comfort Colors', 'Next Level', 'Fruit of the Loom', 'Jerzees', 'TravisMathew',
 		'Cotopaxi', 'OGIO', 'Richardson', 'Port Authority', 'District',
-
-		// Page 3 — trade staples.
-		'Sport-Tek', 'Port & Company', 'Red Kap', 'CornerStone', 'Alternative',
-		'Outdoor Research', 'tentree', 'Bulwark', 'Anvil', 'Allmade',
-
-		// Page 4 — specialist lines.
-		'Stanley/Stella', 'Russell Outdoors', 'Mercer+Mettle', 'Red House', 'Rabbit Skins',
-		'Spacecraft', 'WonderWink', 'Volunteer Knitwear', 'A4',
 	];
 
 	// Flatten the grouped registry to name => file.
@@ -131,7 +123,7 @@ function tse_inject_homepage_brands() {
 		'logoBase'   => tse_brands_logo_base(),
 		'brandsUrl'  => home_url( '/brands/' ),
 		'catalogUrl' => TFB_CATALOG_URL,
-		'perPage'    => 10,
+		'perPage'    => 5,
 	] );
 	?>
 <style id="tfb-home-css">
@@ -208,14 +200,27 @@ function tse_inject_homepage_brands() {
 .tfb-dot[aria-current="true"] { background: var(--forest, #2E4A35); }
 .tfb-dot:focus-visible { outline: 2px solid var(--brass, #B8922A); outline-offset: 2px; }
 
-@media (max-width: 900px) { .tfb-track { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 560px) {
+/* Always one row of five. Below tablet width the names come off: at a
+   fifth of a phone screen, "The North Face" wraps to three lines and the
+   logo already says it. */
+@media (max-width: 900px) {
+  .tfb-track { gap: 8px; }
+  .tfb-cell { min-height: 96px; padding: 12px 8px; }
+  .tfb-cell img { height: 30px; }
+  .tfb-cell span { font-size: .8125rem; }
+}
+/* On phones the flanking arrows would squeeze each logo to ~33px, so they
+   drop below the row and the five logos take the full width. */
+@media (max-width: 640px) {
   .tfb-band { padding: 44px 0; }
-  .tfb-track { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .tfb-arrow { width: 36px; height: 36px; }
-  .tfb-cell { min-height: 96px; padding: 13px 10px; }
-  .tfb-cell img { height: 32px; }
-  .tfb-cell span { font-size: .875rem; }
+  .tfb-band .wrap { padding: 0 14px; }
+  .tfb-car { flex-wrap: wrap; justify-content: center; gap: 14px 18px; }
+  .tfb-track { order: -1; flex: 0 0 100%; gap: 5px; }
+  .tfb-arrow { width: 38px; height: 38px; }
+  .tfb-cell { min-height: 60px; padding: 8px 4px; }
+  .tfb-cell img { height: 26px; }
+  .tfb-cell span { display: none; }
+  .tfb-dots { margin-top: 14px; }
 }
 </style>
 
