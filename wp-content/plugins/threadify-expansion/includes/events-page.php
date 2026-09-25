@@ -131,21 +131,7 @@ function tse_events_body() {
     </div>
   </section>
 
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Why it works</span>
-        <h2>More than a merch table.</h2>
-      </div>
-      <div class="cards">
-        <div class="card"><h3>Something to watch</h3><p>A machine stitching live pulls people in. Guests stop, watch their piece come together, and stay a while.</p></div>
-        <div class="card"><h3>Something to keep</h3><p>A personalized piece outlasts the day. Every time it's worn, your event gets remembered.</p></div>
-        <div class="card"><h3>Something for everyone</h3><p>Ready-made pieces for a quick grab, custom stitching for guests who want theirs made just for them.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="alt" id="how">
+  <section id="how">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">How it works</span>
@@ -159,28 +145,16 @@ function tse_events_body() {
     </div>
   </section>
 
-  <section>
+  <section class="alt">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head tev-center">
         <span class="eyebrow">Great for</span>
         <h2>Made for any crowd.</h2>
       </div>
-      <div class="fit">
-        <span>Markets &amp; pop-ups</span><span>Festivals &amp; fairs</span><span>Game days &amp; tournaments</span>
-        <span>School &amp; spirit nights</span><span>Company events</span><span>Grand openings</span><span>Conventions</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="alt">
-    <div class="wrap">
-      <div class="cross">
-        <div>
-          <h3>Raising money?</h3>
-          <p>We can also build a merch fundraiser for your group — your logo on apparel your supporters buy.</p>
-        </div>
-        <a href="/fundraisers/" class="btn btn-ghost">See Fundraisers →</a>
-      </div>
+      <ul class="tev-fit">
+        <li>Markets &amp; pop-ups</li><li>Festivals &amp; fairs</li><li>Game days &amp; tournaments</li>
+        <li>School &amp; spirit nights</li><li>Company events</li><li>Grand openings</li><li>Conventions</li>
+      </ul>
     </div>
   </section>
 
@@ -281,6 +255,32 @@ function tse_events_assets() {
 /* Evens out the longer headlines so a last word doesn't sit alone on a line. */
 #tdfy .hero h1, #tdfy .tev-head h2{ text-wrap: balance; }
 #tdfy .tev-wrap{ max-width: 760px; }
+
+/* .section-head and its children carry max-widths, so centring needs auto
+   margins on the block itself as well as inside it. */
+#tdfy .section-head.tev-center, #tdfy .section-head.tev-head{ margin-left: auto; margin-right: auto; }
+#tdfy .tev-center{ text-align: center; }
+#tdfy .tev-center > *{ margin-left: auto; margin-right: auto; }
+
+/* Equal tiles in centred rows: seven events sit 4 over 3 on desktop and
+   2-2-2-1 on phones, mirrored around the centre line either way. */
+#tdfy .tev-fit{
+  --gap: 12px;
+  list-style: none; margin: 8px auto 0; padding: 0; max-width: 920px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap);
+}
+#tdfy .tev-fit li{
+  flex: 0 0 calc((100% - 3 * var(--gap)) / 4);
+  box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  min-height: 64px; padding: 12px 14px;
+  font-size: .9375rem; font-weight: 600; color: var(--forest);
+  background: #fff; border: var(--border); border-radius: var(--radius);
+}
+@media (max-width: 640px){
+  /* Tall enough for a two-line name, so every tile matches. */
+  #tdfy .tev-fit li{ flex-basis: calc((100% - var(--gap)) / 2); min-height: 72px; font-size: .875rem; }
+}
 #tdfy .tev-head{ text-align: center; }
 #tdfy .tev-head p{ margin-left: auto; margin-right: auto; }
 #tdfy .tev-form{ background: var(--cream); border: var(--border); border-radius: var(--radius); padding: 30px; }
