@@ -1,27 +1,36 @@
 <?php
 /**
- * Threadify Expansion — shared homepage output buffer
+ * Threadify Expansion — shared output buffer for database-rendered pages
  *
- * The homepage is database markup echoed by code-snippets snippet id=6, which
- * exits on template_redirect before wp_footer() ever runs — the live page has
- * no wp-includes assets and no footer output. (tse_inject_homepage_nav() hooks
- * wp_footer and is dead on the homepage for exactly this reason.) Any change
- * to the homepage therefore has to rewrite the HTML on its way out.
+ * The homepage and /events/ are database markup echoed by code-snippets
+ * snippet id=6, which exits on template_redirect before wp_footer() ever runs
+ * — the live pages have no wp-includes assets and no footer output.
+ * (tse_inject_homepage_nav() hooks wp_footer and is dead on the homepage for
+ * exactly this reason.) Any change to those pages therefore has to rewrite the
+ * HTML on its way out.
  *
  * This opens one buffer, ahead of the snippet, and passes the finished
- * document through the `tse_homepage_html` filter. Each homepage change hooks
- * that filter behind its own on/off flag, so they ship independently of each
- * other. When nothing is hooked, no buffer is opened at all.
+ * document through a per-page filter: `tse_homepage_html` or
+ * `tse_events_html`. Each change hooks its page's filter behind its own on/off
+ * flag, so they ship independently. When nothing is hooked for the current
+ * page, no buffer is opened at all.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+/** Which filter, if any, applies to this request. */
+function tse_buffered_page_filter() {
+	if ( is_front_page() || is_home() ) return 'tse_homepage_html';
+	if ( is_page( 'events' ) )          return 'tse_events_html';
+	return '';
+}
 
 // Priority 0 so the buffer opens before snippet id=6 echoes the page.
 add_action( 'template_redirect', 'tse_homepage_buffer', 0 );
 
 function tse_homepage_buffer() {
-	if ( ! is_front_page() && ! is_home() ) return;
-	if ( ! has_filter( 'tse_homepage_html' ) ) return;
+	$filter = tse_buffered_page_filter();
+	if ( $filter === '' || ! has_filter( $filter ) ) return;
 	ob_start( 'tse_homepage_buffer_flush' );
 }
 
@@ -34,7 +43,7 @@ function tse_homepage_buffer() {
  */
 function tse_homepage_buffer_flush( $html ) {
 	if ( stripos( $html, '</body>' ) === false ) return $html;
-	return apply_filters( 'tse_homepage_html', $html );
+	return apply_filters( tse_buffered_page_filter(), $html );
 }
 
 /**

@@ -22,8 +22,8 @@ require_once TSE_DIR . 'includes/create-menu.php';
 // and meta. Remove this line to switch the page off entirely.
 require_once TSE_DIR . 'includes/brands.php';
 
-// Shared output buffer for every homepage change. Opens nothing unless one of
-// the modules below has hooked in.
+// Shared output buffer for the database-rendered homepage and /events/.
+// Opens nothing unless one of the modules below has hooked in.
 require_once TSE_DIR . 'includes/homepage-buffer.php';
 
 // BETA — homepage brand carousel + catalog move. Gated behind
@@ -34,6 +34,10 @@ require_once TSE_DIR . 'includes/homepage-brands.php';
 // BETA — heat press removed, quote form takes up to 10 files. Gated behind
 // TFB_HOMEPAGE_CONTENT, separately from the carousel so it can ship alone.
 require_once TSE_DIR . 'includes/homepage-content.php';
+
+// BETA — rewritten /events/ page with its own event inquiry form. Gated
+// behind TFB_EVENTS_PAGE.
+require_once TSE_DIR . 'includes/events-page.php';
 
 // BETA DRAFTS — /catalog/ (browse by garment) and /industries/ (browse by
 // trade). Both noindex and unlinked, same as /brands/.
