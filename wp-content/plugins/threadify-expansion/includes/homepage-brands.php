@@ -2,7 +2,7 @@
 /**
  * Threadify Expansion — Homepage patches (BETA, off by default)
  *
- * Four homepage changes, all applied by DOM surgery on wp_footer:
+ * Four homepage changes, applied by a script injected before </body>:
  *
  *   1. a brand carousel inserted between the hero and #services,
  *   2. #industries removed (its content now lives on the catalog page),
@@ -15,15 +15,8 @@
  * id=6, so a template edit cannot touch it. The alternative is a gated
  * db-content/<TICKET>/ script applied over WP-CLI.
  *
- * WHY NOT wp_footer: snippet id=6 echoes a complete document and exits on
- * template_redirect, so wp_footer() never runs on the homepage — fetching the
- * live page shows no wp-includes assets and no footer output at all, and the
- * document simply ends "</div></body></html>". tse_inject_homepage_nav() hooks
- * wp_footer and is therefore dead on the homepage today, which is worth knowing
- * before trusting that pattern. This file instead opens an output buffer ahead
- * of the snippet and rewrites the HTML on its way out, which works whether or
- * not the snippet exits early (PHP flushes buffers, running their callbacks, at
- * shutdown).
+ * The injection rides the shared output buffer in homepage-buffer.php — see
+ * that file for why wp_footer is not an option on the homepage.
  *
  * ─────────────────────────────────────────────────────────────────────
  * THIS IS OFF BY DEFAULT AND MUST STAY OFF UNTIL THE CATALOG PAGE EXISTS.
@@ -103,13 +96,9 @@ function tse_homepage_brand_order() {
 }
 
 // ── Injection ───────────────────────────────────────────────────────
-// Priority 0 so the buffer opens before snippet id=6 echoes the page.
-add_action( 'template_redirect', 'tse_homepage_buffer', 0 );
-
-function tse_homepage_buffer() {
-	if ( ! TFB_HOMEPAGE_PATCH ) return;
-	if ( ! is_front_page() && ! is_home() ) return;
-	ob_start( 'tse_homepage_inject_filter' );
+// Runs through the shared buffer in homepage-buffer.php.
+if ( TFB_HOMEPAGE_PATCH ) {
+	add_filter( 'tse_homepage_html', 'tse_homepage_inject_filter' );
 }
 
 /**
@@ -126,12 +115,8 @@ function tse_homepage_inject_filter( $html ) {
 
 	ob_start();
 	tse_inject_homepage_brands();
-	$payload = ob_get_clean();
 
-	if ( $payload === '' ) return $html;
-
-	$pos = strripos( $html, '</body>' );
-	return substr( $html, 0, $pos ) . $payload . substr( $html, $pos );
+	return tse_homepage_before_body_end( $html, ob_get_clean() );
 }
 
 function tse_inject_homepage_brands() {
